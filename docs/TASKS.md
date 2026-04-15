@@ -19,7 +19,7 @@
 
 ## Фаза 2 — RetailCRM и данные
 
-- [ ] **T2.1** Реализовать скрипт загрузки заказов из `mock_orders.json` в RetailCRM через API (создание заказов в формате, который принимает ваше демо).
+- [x] **T2.1** Реализовать скрипт загрузки заказов из `mock_orders.json` в RetailCRM через API (`npm run upload:retailcrm`, см. [RETAILCRM_UPLOAD.md](./RETAILCRM_UPLOAD.md)).
 - [ ] **T2.2** Проверить в интерфейсе RetailCRM, что заказы отображаются, суммы корректны.
 
 ## Фаза 3 — Синхронизация в Supabase

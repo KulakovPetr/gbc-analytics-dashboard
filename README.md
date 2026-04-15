@@ -2,6 +2,15 @@
 
 Построй мини-дашборд заказов. Используй Claude Code CLI (или другой AI-инструмент).
 
+## Репозиторий
+
+- **Рабочий форк:** [github.com/KulakovPetr/gbc-analytics-dashboard](https://github.com/KulakovPetr/gbc-analytics-dashboard) (`origin`).
+- **Исходное описание задания:** [github.com/ruslangbc-code/gbc-analytics-dashboard](https://github.com/ruslangbc-code/gbc-analytics-dashboard).
+
+```bash
+git remote add upstream https://github.com/ruslangbc-code/gbc-analytics-dashboard.git   # опционально
+```
+
 ## Документация для разработки
 
 | Документ | Содержание |
@@ -10,7 +19,18 @@
 | [docs/TASKS.md](docs/TASKS.md) | Последовательный список задач с чекбоксами. |
 | [docs/SERVICES_SETUP.md](docs/SERVICES_SETUP.md) | Что делать после регистрации RetailCRM, Supabase, Vercel, Telegram; про **не** sales-demo Vercel. |
 | [docs/AI_PLAYBOOK.md](docs/AI_PLAYBOOK.md) | **Пошагово:** что писать агенту, промпты по этапам A–E, цикл PR → CI → merge. |
+| [docs/RETAILCRM_UPLOAD.md](docs/RETAILCRM_UPLOAD.md) | Ключи RetailCRM, `.env`, команда `npm run upload:retailcrm`. |
 | [local/README.md](local/README.md) | Каталог личных черновиков (не сдаётся; в git не попадает содержимое). |
+
+### Загрузка моков в RetailCRM (шаг 2)
+
+```bash
+npm install
+cp .env.example .env   # заполните RETAILCRM_* — см. docs/RETAILCRM_UPLOAD.md
+npm run upload:retailcrm -- --dry-run
+npm run upload:retailcrm
+```
+
 
 ## Что нужно сделать
 

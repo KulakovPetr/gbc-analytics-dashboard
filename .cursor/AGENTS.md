@@ -8,6 +8,7 @@
 |------|------------|
 | `README.md` | Полное ТЗ, шаги 1–5, формат сдачи (@DmitriyKrasnikov). |
 | `mock_orders.json` | 50 тестовых заказов для загрузки в RetailCRM (API). |
+| `docs/RETAILCRM_UPLOAD.md` | Ключи и команда `npm run upload:retailcrm`. |
 | `docs/ARCHITECTURE.md` | Архитектура и стек. |
 | `docs/TASKS.md` | Порядок выполнения задач. |
 | `docs/SERVICES_SETUP.md` | Настройка сервисов и переменных окружения. |
