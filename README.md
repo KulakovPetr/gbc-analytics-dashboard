@@ -2,6 +2,15 @@
 
 Построй мини-дашборд заказов. Используй Claude Code CLI (или другой AI-инструмент).
 
+## Документация для разработки
+
+| Документ | Содержание |
+|----------|------------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Архитектура приложения и потоки данных. |
+| [docs/TASKS.md](docs/TASKS.md) | Последовательный список задач с чекбоксами. |
+| [docs/SERVICES_SETUP.md](docs/SERVICES_SETUP.md) | Что делать после регистрации RetailCRM, Supabase, Vercel, Telegram; про **не** sales-demo Vercel. |
+| [local/README.md](local/README.md) | Каталог личных черновиков (не сдаётся; в git не попадает содержимое). |
+
 ## Что нужно сделать
 
 ### Шаг 1: Создай аккаунты (всё бесплатно)

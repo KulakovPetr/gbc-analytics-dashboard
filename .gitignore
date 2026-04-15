@@ -1,9 +1,39 @@
+# Dependencies and build
 node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+
+# Environment and secrets
 .env
 .env.local
+.env.*.local
+*.pem
+
+# Python (if scripts use Python)
 __pycache__/
 *.pyc
 .venv/
 venv/
-.DS_Store
+
+# Vercel / OS
 .vercel/
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local-only: drafts, prompts, personal copies — not for submission (see local/README.md)
+local/*
+!local/README.md
+
+# Logs and coverage
+*.log
+npm-debug.log*
+coverage/
+.nyc_output/
