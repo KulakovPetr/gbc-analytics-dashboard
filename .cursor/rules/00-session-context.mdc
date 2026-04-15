@@ -1,0 +1,15 @@
+---
+description: Сессия — ТЗ в README, дашборд RetailCRM/Supabase/Vercel/Telegram
+alwaysApply: true
+---
+
+# Контекст сессии
+
+- Каноническое задание: корневой `README.md` (тестовое AI Tools Specialist).
+- Оперативные инструкции агента: `.cursor/AGENTS.md`.
+- Правила про код и деплой применять к запросам **про реализацию** дашборда, скриптов и бота. К вопросам «как устроен RetailCRM в теории» без правок репозитория — без навязывания полного dev-цикла.
+- Git: `.cursor/rules/git-workflow.mdc`.
+- Разработка: `.cursor/rules/development-workflow.mdc`.
+- Чеклист: `.cursor/skills/project-dev-workflow/SKILL.md`.
+
+Данные заказов для тестов: `mock_orders.json` (не править без необходимости; сумма заказа считается по позициям).
