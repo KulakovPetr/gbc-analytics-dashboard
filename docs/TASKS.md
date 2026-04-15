@@ -2,6 +2,8 @@
 
 Отмечайте чекбоксы по мере выполнения. Параллельно держите под рукой [SERVICES_SETUP.md](./SERVICES_SETUP.md) (что копировать в `.env`).
 
+**Как вызывать Cursor по одному шагу (промпты, CI, merge):** [AI_PLAYBOOK.md](./AI_PLAYBOOK.md).
+
 ## Фаза 0 — Окружение репозитория
 
 - [ ] **T0.1** Прочитать [ARCHITECTURE.md](./ARCHITECTURE.md) и этот файл.

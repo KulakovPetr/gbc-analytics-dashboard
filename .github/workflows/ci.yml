@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install, lint, build, test
+        run: |
+          if [ ! -f package.json ]; then
+            echo "No package.json yet — bootstrap phase OK"
+            exit 0
+          fi
+          npm ci
+          npm run lint --if-present
+          npm run build
+          npm test --if-present

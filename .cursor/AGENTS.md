@@ -11,6 +11,7 @@
 | `docs/ARCHITECTURE.md` | Архитектура и стек. |
 | `docs/TASKS.md` | Порядок выполнения задач. |
 | `docs/SERVICES_SETUP.md` | Настройка сервисов и переменных окружения. |
+| `docs/AI_PLAYBOOK.md` | Промпты для агента по этапам, PR, CI, merge. |
 | `local/` | Личные черновики (содержимое в `.gitignore`, не для сдачи). |
 
 Код дашборда и `scripts/` для синка — в репо; секреты только в `.env` и в Vercel Environment Variables.

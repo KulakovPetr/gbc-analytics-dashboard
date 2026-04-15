@@ -9,6 +9,7 @@
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Архитектура приложения и потоки данных. |
 | [docs/TASKS.md](docs/TASKS.md) | Последовательный список задач с чекбоксами. |
 | [docs/SERVICES_SETUP.md](docs/SERVICES_SETUP.md) | Что делать после регистрации RetailCRM, Supabase, Vercel, Telegram; про **не** sales-demo Vercel. |
+| [docs/AI_PLAYBOOK.md](docs/AI_PLAYBOOK.md) | **Пошагово:** что писать агенту, промпты по этапам A–E, цикл PR → CI → merge. |
 | [local/README.md](local/README.md) | Каталог личных черновиков (не сдаётся; в git не попадает содержимое). |
 
 ## Что нужно сделать
