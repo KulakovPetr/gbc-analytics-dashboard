@@ -32,6 +32,20 @@ npm run upload:retailcrm -- --dry-run
 npm run upload:retailcrm
 ```
 
+### Синк в Supabase (шаг 3)
+
+```bash
+# 1) Выполните SQL из docs/supabase-schema.sql в Supabase SQL Editor
+npm run sync:supabase
+```
+
+### Локальный дашборд (шаг 4)
+
+```bash
+npm run dev
+# откройте http://localhost:3000
+```
+
 
 ## Что нужно сделать
 
