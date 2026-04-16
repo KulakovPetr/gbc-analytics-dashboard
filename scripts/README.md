@@ -2,6 +2,7 @@
 
 Сюда помещайте воспроизводимые скрипты задания:
 
+- проверка `.env` без вывода секретов: из корня `npm run check:env` — [`check-env.mjs`](./check-env.mjs);
 - загрузка `mock_orders.json` в RetailCRM — [`upload-to-retailcrm.mjs`](./upload-to-retailcrm.mjs), маппинг в [`lib/map-mock-order-to-retailcrm.mjs`](./lib/map-mock-order-to-retailcrm.mjs);
 - синхронизация RetailCRM → Supabase (будет добавлена на этапе B).
 

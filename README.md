@@ -18,6 +18,7 @@ git remote add upstream https://github.com/ruslangbc-code/gbc-analytics-dashboar
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Архитектура приложения и потоки данных. |
 | [docs/TASKS.md](docs/TASKS.md) | Последовательный список задач с чекбоксами. |
 | [docs/SERVICES_SETUP.md](docs/SERVICES_SETUP.md) | Что делать после регистрации RetailCRM, Supabase, Vercel, Telegram; про **не** sales-demo Vercel. |
+| [docs/VERCEL_SETUP.md](docs/VERCEL_SETUP.md) | Vercel по шагам: Google-логин, **Install GitHub App**, импорт репо, env. |
 | [docs/AI_PLAYBOOK.md](docs/AI_PLAYBOOK.md) | **Пошагово:** что писать агенту, промпты по этапам A–E, цикл PR → CI → merge. |
 | [docs/RETAILCRM_UPLOAD.md](docs/RETAILCRM_UPLOAD.md) | Ключи RetailCRM, `.env`, команда `npm run upload:retailcrm`. |
 | [local/README.md](local/README.md) | Каталог личных черновиков (не сдаётся; в git не попадает содержимое). |

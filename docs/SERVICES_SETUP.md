@@ -41,16 +41,18 @@
 
 ### Важно: не путать с Sales / Enterprise
 
-Страница вида **`vercel.com/contact/sales/demo`** — это **заявка на демо для бизнеса** (продажи, крупные компании). Там могут спрашивать сайт компании, размер команды и т.д. **Для тестового задания это не нужно.**
+Страница вида **`vercel.com/contact/sales/demo`** — это **заявка на демо для бизнеса**. Для тестового задания **не нужна**.
 
-**Что сделать вам:**
+### Подробно: куда нажимать, Google vs GitHub, сообщение «Install the GitHub application…»
 
-1. Зайти на **[vercel.com/signup](https://vercel.com/signup)** (регистрация через **GitHub** — самый простой путь).
-2. Выбрать план **Hobby** (бесплатный) — без звонков в sales.
-3. Когда в репозитории появится приложение (например Next.js): **Add New → Project** → импорт репозитория с GitHub → Build & Deploy.
-4. В настройках проекта → **Environment Variables** добавить те же имена, что в `.env.example` (значения — из RetailCRM, Supabase, Telegram).
+Отдельная инструкция с пошаговыми экранами: **[VERCEL_SETUP.md](./VERCEL_SETUP.md)**.
 
-**Что от вас «требует» Vercel при обычном деплое:** доступ к GitHub-репо (read), команда сборки из шаблона (`npm run build`), переменные окружения. **Свой домен или корпоративный сайт не обязательны** — хватит URL вида `your-project.vercel.app`.
+Кратко:
+
+1. Регистрация на [vercel.com/signup](https://vercel.com/signup) через **Google** — нормально.
+2. Импорт репо (**Add New → Project**) требует **GitHub-аккаунт с кодом** и установленного **GitHub App «Vercel»** (это не то же самое, что логин в Vercel через Google). Если GitHub «пустой» — создайте репозиторий на GitHub и подключите Git в **Vercel → Account Settings → Git → Connect GitHub**.
+3. **Environment Variables:** проект → **Settings → Environment Variables** — те же имена, что в `.env.example`.
+4. Для деплоя достаточно URL вида `*.vercel.app`; свой домен не обязателен.
 
 ---
 

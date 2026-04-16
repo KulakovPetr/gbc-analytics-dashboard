@@ -7,6 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "check:env": "node scripts/check-env.mjs",
     "upload:retailcrm": "node scripts/upload-to-retailcrm.mjs",
     "build": "node scripts/upload-to-retailcrm.mjs --dry-run",
     "lint": "node -e \"console.log('lint: not configured for scripts-only phase')\""
