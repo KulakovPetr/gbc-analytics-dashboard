@@ -9,4 +9,4 @@ npm run sync:supabase
 
 ќжидаемо: `Done. Synced <N> orders from RetailCRM to Supabase.`
 
-≈сли снова 404 на `public.orders` Ч SQL не применилс€ или применилс€ в другом проекте/схеме.
+≈сли снова 404 на `public.orders` или `public.order_events` Ч SQL не применилс€ или применилс€ в другом проекте/схеме.

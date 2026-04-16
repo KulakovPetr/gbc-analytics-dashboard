@@ -46,6 +46,16 @@ npm run dev
 # откройте http://localhost:3000
 ```
 
+### Telegram (шаг 5)
+
+```bash
+# получить chat_id через Bot API getUpdates (после /start в чате с ботом)
+npm run telegram:chat-id
+
+# уведомления отправляются во время sync:supabase
+# порог по умолчанию 50000 (можно переопределить TELEGRAM_ALERT_THRESHOLD_KZT)
+```
+
 
 ## Что нужно сделать
 
