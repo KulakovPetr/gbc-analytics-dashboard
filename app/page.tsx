@@ -1,27 +1,31 @@
+import { OrdersBarSvg } from "@/components/OrdersBarSvg";
 import { OrdersDualLineSvg } from "@/components/OrdersDualLineSvg";
 import { fetchOrdersSeries } from "@/lib/orders-series";
 
 export const dynamic = "force-dynamic";
 
-function DayBars({ points }: { points: { day: string; orders: number; revenueKzt: number }[] }) {
-  const maxOrders = Math.max(1, ...points.map((p) => p.orders));
+function DayTable({ points }: { points: { day: string; orders: number; revenueKzt: number }[] }) {
   return (
-    <div style={{ display: "grid", gap: 10 }}>
-      {points.map((p) => {
-        const width = Math.max(2, Math.round((p.orders / maxOrders) * 100));
-        return (
-          <div key={p.day} style={{ display: "grid", gridTemplateColumns: "120px 1fr 160px", gap: 12, alignItems: "center" }}>
-            <div style={{ fontVariantNumeric: "tabular-nums", color: "#334155" }}>{p.day}</div>
-            <div style={{ background: "#e2e8f0", borderRadius: 8, overflow: "hidden", height: 18 }}>
-              <div style={{ width: `${width}%`, background: "#2563eb", height: "100%" }} />
-            </div>
-            <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#0f172a" }}>
-              {p.orders} шт · {Math.round(p.revenueKzt).toLocaleString("ru-RU")} ₸
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+      <thead>
+        <tr style={{ textAlign: "left", color: "#64748b" }}>
+          <th style={{ padding: "8px 0", borderBottom: "1px solid #e2e8f0" }}>День</th>
+          <th style={{ padding: "8px 0", borderBottom: "1px solid #e2e8f0" }}>Заказы</th>
+          <th style={{ padding: "8px 0", borderBottom: "1px solid #e2e8f0" }}>Выручка, ₸</th>
+        </tr>
+      </thead>
+      <tbody>
+        {points.map((p) => (
+          <tr key={p.day}>
+            <td style={{ padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontVariantNumeric: "tabular-nums" }}>{p.day}</td>
+            <td style={{ padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontVariantNumeric: "tabular-nums" }}>{p.orders}</td>
+            <td style={{ padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontVariantNumeric: "tabular-nums" }}>
+              {Math.round(p.revenueKzt).toLocaleString("ru-RU")}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -47,7 +51,7 @@ export default async function Page() {
     <section style={{ display: "grid", gap: 20 }}>
       <h1 style={{ margin: 0 }}>Заказы по дням (Supabase)</h1>
       <p style={{ margin: 0, color: "#475569" }}>
-        Данные из таблицы <code>public.orders</code>. Ниже — <strong>линейный график</strong> по дням и столбчатое представление.
+        Данные из таблицы <code>public.orders</code>. Ниже — <strong>линейный график</strong>, <strong>гистограмма заказов</strong> по дням и таблица по дням.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(160px, 1fr))", gap: 12 }}>
@@ -62,13 +66,18 @@ export default async function Page() {
       </div>
 
       <div style={{ background: "white", borderRadius: 12, padding: 16, border: "1px solid #e2e8f0" }}>
-        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>График по дням</h2>
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>График по дням (линии)</h2>
         <OrdersDualLineSvg points={data.points} />
       </div>
 
+      <div style={{ background: "white", borderRadius: 12, padding: 16, border: "1px solid #e2e8f0" }}>
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>График заказов по дням (столбцы)</h2>
+        <OrdersBarSvg points={data.points} />
+      </div>
+
       <div style={{ background: "white", borderRadius: 12, padding: 14, border: "1px solid #e2e8f0" }}>
-        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>По дням (столбцы)</h2>
-        <DayBars points={data.points} />
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>По дням (таблица)</h2>
+        <DayTable points={data.points} />
       </div>
     </section>
   );

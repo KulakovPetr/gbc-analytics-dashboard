@@ -2,6 +2,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
+import { createClient } from "@supabase/supabase-js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -13,6 +14,7 @@ const SITE = process.env.RETAILCRM_SITE || "";
 const SUPABASE_URL = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const PAGE_LIMIT = Number(process.env.RETAILCRM_SYNC_PAGE_LIMIT || 100);
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "";
 const TELEGRAM_THRESHOLD_KZT = Number(process.env.TELEGRAM_ALERT_THRESHOLD_KZT || 50000);
@@ -96,6 +98,17 @@ async function fetchRetailOrders(site) {
     page += 1;
   }
   return all;
+}
+
+async function wipeSupabaseOrders() {
+  const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error: e1 } = await sb.from("order_events").delete().not("id", "is", null);
+  if (e1) throw new Error(`order_events wipe: ${e1.message}`);
+  const { error: e2 } = await sb.from("orders").delete().not("id", "is", null);
+  if (e2) throw new Error(`orders wipe: ${e2.message}`);
+  console.log("Supabase: cleared order_events + orders (SYNC_FULL_REPLACE).");
 }
 
 async function upsertSupabase(rows) {
@@ -242,22 +255,44 @@ async function notifyHighValueOrders(rows) {
   console.log(`Telegram notifications: sent ${sentExternalIds.length}/${candidates.length}.`);
 }
 
-async function main() {
+export async function runRetailCrmSync() {
   required("RETAILCRM_API_URL", API_URL);
   required("RETAILCRM_API_KEY", API_KEY);
   required("NEXT_PUBLIC_SUPABASE_URL", SUPABASE_URL);
   required("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_KEY);
 
+  const syncOnlyPrefix = (process.env.SYNC_ONLY_MOCK_PREFIX || "").trim();
+  const syncFullReplace =
+    process.env.SYNC_FULL_REPLACE === "yes" ||
+    process.env.SYNC_FULL_REPLACE === "1" ||
+    process.env.SYNC_FULL_REPLACE === "true";
+
   const site = await resolveSite();
-  const orders = await fetchRetailOrders(site);
+  let orders = await fetchRetailOrders(site);
+  const totalFetched = orders.length;
+
+  if (syncOnlyPrefix) {
+    orders = orders.filter((o) => typeof o.externalId === "string" && o.externalId.startsWith(syncOnlyPrefix));
+    console.log(`Filter SYNC_ONLY_MOCK_PREFIX='${syncOnlyPrefix}': ${orders.length}/${totalFetched} orders.`);
+  }
+
+  if (syncFullReplace) {
+    await wipeSupabaseOrders();
+  }
+
   const rows = orders.map(mapOrder);
 
   await upsertSupabase(rows);
   await notifyHighValueOrders(rows);
-  console.log(`Done. Synced ${rows.length} orders from RetailCRM to Supabase.`);
+  console.log(`Done. Synced ${rows.length} orders from RetailCRM to Supabase (fetched ${totalFetched} from CRM).`);
 }
 
-main().catch((e) => {
-  console.error(e.message || e);
-  process.exit(1);
-});
+const syncSelfPath = fileURLToPath(import.meta.url);
+const isMain = Boolean(process.argv[1] && path.resolve(process.argv[1]) === path.resolve(syncSelfPath));
+
+if (isMain) {
+  runRetailCrmSync().catch((e) => {
+    console.error(e.message || e);
+    process.exit(1);
+  });
+}
