@@ -10,6 +10,7 @@
     "dev": "next dev",
     "start": "next start",
     "check:env": "node scripts/check-env.mjs",
+    "readme:prompts": "python scripts/refresh-readme-prompts.py",
     "sync:supabase": "node scripts/sync-retailcrm-to-supabase.mjs",
     "telegram:chat-id": "node scripts/get-telegram-updates.mjs",
     "seed:retailcrm:timed": "node scripts/create-retailcrm-timed-orders.mjs",
