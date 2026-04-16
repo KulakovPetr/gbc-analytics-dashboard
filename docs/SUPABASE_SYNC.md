@@ -25,3 +25,15 @@ The same sync script can send Telegram alerts for high-value orders and de-dupli
 
 If Telegram env vars are missing, sync still completes and skips notifications.
 If your local network cannot reach Telegram API, use `TELEGRAM_MODE=dry-run` to validate de-duplication end-to-end without real sends.
+
+## Vercel cron trigger
+
+`vercel.json` includes a cron call to `GET /api/cron/sync` once per day.
+
+- Add `CRON_SECRET` in Vercel project env.
+- Vercel will send `Authorization: Bearer <CRON_SECRET>` to cron route.
+- Route performs:
+  1) RetailCRM fetch
+  2) Supabase upsert into `orders`
+  3) Telegram send for new high-value orders
+  4) de-dup mark in `order_events`
