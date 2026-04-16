@@ -42,6 +42,19 @@
 
 **Типичная ошибка:** в `NEXT_PUBLIC_SUPABASE_ANON_KEY` вставили **service_role** (или наоборот) — тогда в REST будет **401**. Ещё раз скопируйте: в строке anon при декодировании JWT (необязательно) в payload обычно есть `"role":"anon"`, у service_role — `"role":"service_role"`.
 
+### Новые ключи (`sb_publishable_…` и `sb_secret_…`)
+
+В части проектов в разделе **API** вместо подписей `anon` / `service_role` показывают **Publishable** и **Secret** со строками вида `sb_publishable_…` и `sb_secret_…`. Это [новая модель ключей Supabase](https://supabase.com/docs/guides/api/api-keys); для приложения это те же роли:
+
+| В панели Supabase | Переменная в `.env` |
+|-------------------|---------------------|
+| **Publishable** (`sb_publishable_…`) | **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** |
+| **Secret** (`sb_secret_…`) | **`SUPABASE_SERVICE_ROLE_KEY`** |
+
+**Копировать нужно всю строку целиком, вместе с префиксом** `sb_publishable_` или `sb_secret_` — это часть значения ключа, не отдельный «префикс для настройки». Без кавычек в `.env`, без пробелов в начале/конце.
+
+Имена переменных в коде и в Vercel **не меняйте** (`NEXT_PUBLIC_SUPABASE_ANON_KEY` и `SUPABASE_SERVICE_ROLE_KEY`) — подставляйте туда новые значения; клиентские библиотеки Supabase принимают оба формата (JWT и `sb_*`) в заголовке `apikey` / `Authorization: Bearer …`.
+
 **Не требуется:** SSH для приложения. Строка `postgresql://...` из раздела **Database** для этого задания не обязательна, если вы ходите в БД через HTTP API.
 
 **Дальше:** в SQL Editor создайте таблицы (см. [ARCHITECTURE.md](./ARCHITECTURE.md)), вставьте URL и ключи в `.env` и в Vercel.
