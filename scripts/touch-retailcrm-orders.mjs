@@ -17,6 +17,8 @@ const API_URL = (process.env.RETAILCRM_API_URL || "").replace(/\/$/, "");
 const API_KEY = process.env.RETAILCRM_API_KEY || "";
 const SITE = process.env.RETAILCRM_SITE || "";
 const PREFIX = (process.env.TOUCH_PREFIX || process.env.CLEANUP_MOCK_PREFIX || "gbc-mock-").trim();
+// append (default) | trim
+const MODE = (process.env.TOUCH_MODE || "append").toLowerCase();
 const PAGE_LIMIT = Number(process.env.RETAILCRM_SYNC_PAGE_LIMIT || 100);
 const DELAY_MS = Number(process.env.RETAILCRM_TOUCH_DELAY_MS || 120);
 
@@ -101,14 +103,19 @@ async function main() {
     return;
   }
 
-  console.log(`Touching ${targets.length} orders (prefix='${PREFIX}') on site=${site}…`);
+  console.log(`Touching ${targets.length} orders (prefix='${PREFIX}', mode='${MODE}') on site=${site}…`);
   let ok = 0;
   let fail = 0;
 
   for (const o of targets) {
     const externalId = String(o.externalId);
     const firstName = typeof o.firstName === "string" ? o.firstName : "";
-    const newFirstName = firstName.endsWith(" ") ? firstName : `${firstName} `;
+    const newFirstName =
+      MODE === "trim"
+        ? firstName.replace(/\s+$/g, "")
+        : firstName.endsWith(" ")
+          ? firstName
+          : `${firstName} `;
     try {
       await touchOrder(externalId, site, newFirstName);
       ok++;
