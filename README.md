@@ -93,3 +93,25 @@ npm run telegram:chat-id
 
 РћС‚РїСЂР°РІСЊ СЂРµР·СѓР»СЊС‚Р°С‚ РІ Telegram: @DmitriyKrasnikov
 
+### Vercel cron (шаг 6.2)
+
+```bash
+# Endpoint для cron (server-side):
+# GET /api/cron/sync
+```
+
+`vercel.json` уже содержит cron расписание каждые 30 минут.
+
+В Vercel Environment Variables нужно добавить:
+
+- `RETAILCRM_API_URL`
+- `RETAILCRM_API_KEY`
+- `RETAILCRM_SITE`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+- `CRON_SECRET` (для защиты endpoint)
+- `TELEGRAM_MODE=live` (или `dry-run` для безопасной проверки)
+
+После сохранения env сделайте Redeploy.
