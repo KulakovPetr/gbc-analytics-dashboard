@@ -12,6 +12,7 @@
     "check:env": "node scripts/check-env.mjs",
     "sync:supabase": "node scripts/sync-retailcrm-to-supabase.mjs",
     "telegram:chat-id": "node scripts/get-telegram-updates.mjs",
+    "seed:retailcrm:timed": "node scripts/create-retailcrm-timed-orders.mjs",
     "upload:retailcrm": "node scripts/upload-to-retailcrm.mjs",
     "build": "next build",
     "lint": "eslint ."
@@ -32,3 +33,4 @@
     "typescript": "^6.0.2"
   }
 }
+
