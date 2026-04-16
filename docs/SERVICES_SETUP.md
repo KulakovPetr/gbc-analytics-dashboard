@@ -93,6 +93,15 @@
 
 **Дальше:** серверный код вызывает метод Bot API, например `sendMessage`, с токеном в URL или заголовке (как в [документации Telegram](https://core.telegram.org/bots/api)).
 
+### Telegram дома без VPN не открывается, с VPN — да
+
+Часто это **ограничение провайдера / региона** до хоста `api.telegram.org` на вашем домашнем интернете, а не ошибка токена.
+
+- **Локально** (`npm run check:env`, Postman с ПК) запрос может **не дойти** — это ожидаемо.
+- **Vercel** (сборка и функции в датацентрах вне вашей сети) и **GitHub Actions** обычно **достучаться до Telegram могут** без вашего VPN.
+
+Проверка **не с вашего ПК:** в репозитории есть workflow **[`.github/workflows/telegram-ping.yml`](../.github/workflows/telegram-ping.yml)** (запуск вручную: **Actions → Telegram API ping → Run workflow**). Предварительно добавьте в GitHub **Settings → Secrets and variables → Actions** секрет `TELEGRAM_BOT_TOKEN`. В логе не печатайте токен публично.
+
 ---
 
 ## Сводка: что лежит в `.env`

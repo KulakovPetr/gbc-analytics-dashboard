@@ -28,9 +28,9 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 
-# Local-only: drafts, prompts, personal copies — not for submission (see local/README.md)
-local/*
-!local/README.md
+# Cursor + локальные черновики — не в репозитории и не в прод-деплое из git
+.cursor/
+local/
 
 # Logs and coverage
 *.log

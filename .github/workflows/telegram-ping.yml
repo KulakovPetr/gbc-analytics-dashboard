@@ -1,0 +1,23 @@
+# Ручная проверка Telegram из сети GitHub (у вас дома api.telegram.org может быть недоступен без VPN).
+# Настройка: GitHub → Settings → Secrets and variables → Actions → New repository secret TELEGRAM_BOT_TOKEN
+name: Telegram API ping
+
+on:
+  workflow_dispatch:
+
+jobs:
+  getMe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: getMe (без вывода токена)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
+            echo "Добавьте repository secret TELEGRAM_BOT_TOKEN (Settings → Secrets → Actions)"
+            exit 1
+          fi
+          out=$(curl -sS "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe")
+          echo "$out" | head -c 400
+          echo ""
+          echo "$out" | grep -q '"ok":true' && echo "OK: Telegram API отвечает из облака GitHub Actions"

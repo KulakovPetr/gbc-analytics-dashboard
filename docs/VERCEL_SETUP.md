@@ -156,3 +156,16 @@ npm run check:env
 | **Supabase HTTP 401** | Чаще всего неверный или обрезанный **anon** / **service_role** ключ (скопируйте заново из Supabase → Project Settings → API, без пробелов и кавычек). |
 | **Telegram «fetch failed»** | Нет маршрута до `api.telegram.org` (фаервол/VPN) или неверный URL; при неверном токене обычно приходит JSON с `401`/`Unauthorized` — тогда замените токен в BotFather. |
 | **RetailCRM FAIL** | Проверьте URL и API-ключ, права ключа на заказы. |
+
+---
+
+## 9. Сборка без Next.js: «ничего не билдится» и ошибка после `npm install`
+
+Пока в репозитории нет Next.js, Vercel всё равно должен получить **готовые статические файлы** для выдачи. В корне заданы:
+
+- каталог **`public/`** с минимальным [`public/index.html`](../public/index.html);
+- файл **`vercel.json`**: `framework: null`, `buildCommand: npm run build`, `outputDirectory: public`.
+
+Команда **`npm run build`** по-прежнему прогоняет проверку скрипта загрузки (dry-run) и не ломает деплой.
+
+Если в интерфейсе Vercel вы вручную меняли **Output Directory** или **Framework**, приведите к значениям из `vercel.json` или задайте **Output Directory = `public`**, **Build = `npm run build`**, **Install = `npm ci`**.

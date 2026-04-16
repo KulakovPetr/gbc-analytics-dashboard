@@ -21,7 +21,7 @@ git remote add upstream https://github.com/ruslangbc-code/gbc-analytics-dashboar
 | [docs/VERCEL_SETUP.md](docs/VERCEL_SETUP.md) | Vercel по шагам: Google-логин, **Install GitHub App**, импорт репо, env. |
 | [docs/AI_PLAYBOOK.md](docs/AI_PLAYBOOK.md) | **Пошагово:** что писать агенту, промпты по этапам A–E, цикл PR → CI → merge. |
 | [docs/RETAILCRM_UPLOAD.md](docs/RETAILCRM_UPLOAD.md) | Ключи RetailCRM, `.env`, команда `npm run upload:retailcrm`. |
-| [local/README.md](local/README.md) | Каталог личных черновиков (не сдаётся; в git не попадает содержимое). |
+| [docs/LOCAL_WORKFLOW.md](docs/LOCAL_WORKFLOW.md) | Папки `local/` и `.cursor/` только у вас на диске (не в git / не на Vercel). |
 
 ### Загрузка моков в RetailCRM (шаг 2)
 

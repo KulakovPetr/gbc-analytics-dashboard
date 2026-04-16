@@ -8,4 +8,4 @@
 
 Ключи и инструкция: [docs/RETAILCRM_UPLOAD.md](../docs/RETAILCRM_UPLOAD.md).
 
-Черновики, разовые эксперименты и личные заметки — в каталог [`local/`](../local/README.md) (не попадают в git).
+Черновики и личные заметки — в каталог `local/` у себя на диске (см. [docs/LOCAL_WORKFLOW.md](../docs/LOCAL_WORKFLOW.md), в git не коммитится).
