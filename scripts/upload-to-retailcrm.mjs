@@ -45,12 +45,51 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function createOrder(order) {
+async function fetchRetailJson(pathnameWithQuery) {
+  const url = `${API_URL}${pathnameWithQuery}${pathnameWithQuery.includes("?") ? "&" : "?"}apiKey=${encodeURIComponent(API_KEY)}`;
+  const res = await fetch(url);
+  const text = await res.text();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`Non-JSON response HTTP ${res.status}: ${text.slice(0, 500)}`);
+  }
+  return { status: res.status, json };
+}
+
+async function resolveRuntimeOpts() {
+  let runtimeSite = SITE;
+  const runtimeMapOpts = { ...mapOpts };
+
+  if (!runtimeSite) {
+    const { json } = await fetchRetailJson("/api/credentials");
+    const siteCandidates = Array.isArray(json?.sitesAvailable) ? json.sitesAvailable : [];
+    if (siteCandidates.length > 0) {
+      runtimeSite = siteCandidates[0];
+      console.log(`Auto-detected RETAILCRM_SITE=${runtimeSite} from /api/credentials`);
+    }
+  }
+
+  if (!runtimeMapOpts.orderType) {
+    const { json } = await fetchRetailJson("/api/v5/reference/order-types");
+    const orderTypes = json?.orderTypes && typeof json.orderTypes === "object" ? Object.values(json.orderTypes) : [];
+    const defaultType = orderTypes.find((t) => t.defaultForApi)?.code || orderTypes.find((t) => t.defaultForCrm)?.code;
+    if (defaultType) {
+      runtimeMapOpts.orderType = defaultType;
+      console.log(`Auto-detected RETAILCRM_ORDER_TYPE=${defaultType} from reference/order-types`);
+    }
+  }
+
+  return { runtimeSite, runtimeMapOpts };
+}
+
+async function createOrder(order, runtimeSite) {
   const url = `${API_URL}/api/v5/orders/create?apiKey=${encodeURIComponent(API_KEY)}`;
   const body = new URLSearchParams();
   body.set("order", JSON.stringify(order));
-  if (SITE) {
-    body.set("site", SITE);
+  if (runtimeSite) {
+    body.set("site", runtimeSite);
   }
 
   const res = await fetch(url, {
@@ -98,18 +137,17 @@ async function main() {
     process.exit(1);
   }
   if (!SITE) {
-    console.warn(
-      "RETAILCRM_SITE is empty. If the API returns an error about «site», set RETAILCRM_SITE to your store symbolic code (Администрирование → Магазины).",
-    );
+    console.warn("RETAILCRM_SITE is empty in .env — trying auto-detection from /api/credentials.");
   }
+  const { runtimeSite, runtimeMapOpts } = await resolveRuntimeOpts();
 
   let ok = 0;
   let fail = 0;
 
   for (let i = 0; i < mocks.length; i++) {
-    const order = mapMockOrderToRetailOrder(mocks[i], { index: i }, mapOpts);
+    const order = mapMockOrderToRetailOrder(mocks[i], { index: i }, runtimeMapOpts);
     try {
-      const { status, json } = await createOrder(order);
+      const { status, json } = await createOrder(order, runtimeSite);
       if (json.success) {
         ok++;
         console.log(`[${i + 1}/${mocks.length}] created id=${json.id ?? "?"} externalId=${order.externalId}`);
