@@ -23,6 +23,7 @@
     "telegram:chat-id": "node scripts/get-telegram-updates.mjs",
     "seed:retailcrm:timed": "node scripts/create-retailcrm-timed-orders.mjs",
     "upload:retailcrm": "node scripts/upload-to-retailcrm.mjs",
+    "retailcrm:touch": "node scripts/touch-retailcrm-orders.mjs",
     "build": "next build",
     "lint": "eslint ."
   },
