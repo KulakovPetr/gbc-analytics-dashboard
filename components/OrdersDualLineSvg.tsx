@@ -39,6 +39,7 @@ type SubplotProps = {
   formatTick: (v: number) => string;
   showXLabels: boolean;
   valueLabel: (p: Point) => string;
+  valueLabelFill?: string;
 };
 
 function LineSubplot({
@@ -57,6 +58,7 @@ function LineSubplot({
   formatTick,
   showXLabels,
   valueLabel,
+  valueLabelFill = "#334155",
 }: SubplotProps) {
   const innerW = W - padL - padR;
   const innerH = 150;
@@ -100,7 +102,7 @@ function LineSubplot({
         <g key={`${title}-${p.day}`}>
           <circle cx={gx(i)} cy={yScale(getY(p))} r={5} fill={fill} stroke="white" strokeWidth={2} />
           {n <= 14 && (
-            <text x={gx(i)} y={yScale(getY(p)) - 12} textAnchor="middle" fontSize={10} fill="#334155" fontWeight={600}>
+            <text x={gx(i)} y={yScale(getY(p)) - 12} textAnchor="middle" fontSize={10} fill={valueLabelFill} fontWeight={600}>
               {valueLabel(p)}
             </text>
           )}
@@ -121,8 +123,8 @@ function LineSubplot({
 }
 
 /**
- * Два отдельных графика по дням (свой масштаб Y), чтобы заказы и выручка не «лепились»
- * на одной сетке и не путались цвета с подписями оси.
+ * Сверху — только выручка (зелёная линия/точки), снизу — только заказы (синяя).
+ * Отдельные оси Y, без смешения серий на одном поле.
  */
 export function OrdersDualLineSvg({ points }: { points: Point[] }) {
   if (points.length === 0) {
@@ -144,7 +146,7 @@ export function OrdersDualLineSvg({ points }: { points: Point[] }) {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <svg viewBox={`0 0 ${W} ${yOffsetBottom + padT + 150 + padB + 4}`} width="100%" height={yOffsetBottom + padT + 150 + padB + 4} role="img" aria-label="Заказы и выручка по дням, два графика">
+      <svg viewBox={`0 0 ${W} ${yOffsetBottom + padT + 150 + padB + 4}`} width="100%" height={yOffsetBottom + padT + 150 + padB + 4} role="img" aria-label="Выручка и заказы по дням">
         <rect width={W} height="100%" fill="#fafafa" rx={8} />
 
         <g transform="translate(0, 0)">
@@ -155,15 +157,16 @@ export function OrdersDualLineSvg({ points }: { points: Point[] }) {
             padR={padR}
             padT={padT}
             padB={padB}
-            title="Заказы (шт.) — синяя линия"
-            titleColor="#1d4ed8"
-            stroke="#2563eb"
-            fill="#2563eb"
-            getY={(p) => p.orders}
-            maxY={maxOrders}
-            formatTick={(v) => String(v)}
+            title="Выручка (₸)"
+            titleColor="#15803d"
+            stroke="#16a34a"
+            fill="#16a34a"
+            getY={(p) => p.revenueKzt}
+            maxY={maxRev}
+            formatTick={(v) => (v >= 1000 ? `${formatKzt(v)} ₸` : `${Math.round(v)}`)}
             showXLabels={false}
-            valueLabel={(p) => String(p.orders)}
+            valueLabel={(p) => Math.round(p.revenueKzt).toLocaleString("ru-RU")}
+            valueLabelFill="#15803d"
           />
         </g>
 
@@ -175,15 +178,16 @@ export function OrdersDualLineSvg({ points }: { points: Point[] }) {
             padR={padR}
             padT={padT}
             padB={padB}
-            title="Выручка (₸) — зелёная линия"
-            titleColor="#15803d"
-            stroke="#16a34a"
-            fill="#16a34a"
-            getY={(p) => p.revenueKzt}
-            maxY={maxRev}
-            formatTick={(v) => (v >= 1000 ? `${formatKzt(v)} ₸` : `${Math.round(v)}`)}
+            title="Заказы (шт.)"
+            titleColor="#1d4ed8"
+            stroke="#2563eb"
+            fill="#2563eb"
+            getY={(p) => p.orders}
+            maxY={maxOrders}
+            formatTick={(v) => String(v)}
             showXLabels={true}
-            valueLabel={(p) => Math.round(p.revenueKzt).toLocaleString("ru-RU")}
+            valueLabel={(p) => String(p.orders)}
+            valueLabelFill="#1d4ed8"
           />
         </g>
       </svg>

@@ -44,6 +44,26 @@ function toIso(value) {
   return date.toISOString();
 }
 
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function fetchWithRetry(url, init, retries = 4, baseDelayMs = 600) {
+  let lastError;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      return await fetch(url, init);
+    } catch (e) {
+      lastError = e;
+      if (attempt === retries) break;
+      const delay = baseDelayMs * 2 ** (attempt - 1);
+      console.warn(`Network error, retry ${attempt}/${retries - 1} in ${delay}ms`);
+      await sleep(delay);
+    }
+  }
+  throw lastError || new Error("fetchWithRetry failed");
+}
+
 function mapOrder(order) {
   return {
     external_id: String(order.externalId || `retailcrm-${order.id}`),
@@ -123,7 +143,7 @@ async function upsertSupabase(rows) {
 
   for (let i = 0; i < rows.length; i += batchSize) {
     const batch = rows.slice(i, i + batchSize);
-    const res = await fetch(url, {
+    const res = await fetchWithRetry(url, {
       method: "POST",
       headers: {
         apikey: SUPABASE_SERVICE_KEY,

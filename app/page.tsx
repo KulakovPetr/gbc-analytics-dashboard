@@ -51,7 +51,7 @@ export default async function Page() {
     <section style={{ display: "grid", gap: 20 }}>
       <h1 style={{ margin: 0 }}>Заказы по дням (Supabase)</h1>
       <p style={{ margin: 0, color: "#475569" }}>
-        Данные из таблицы <code>public.orders</code>. Ниже — <strong>линейный график</strong>, <strong>гистограмма заказов</strong> по дням и таблица по дням.
+        Данные из таблицы <code>public.orders</code>. Сначала <strong>выручка по дням</strong> (зелёная линия), затем <strong>заказы</strong> (синяя линия и столбцы) и таблица.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(160px, 1fr))", gap: 12 }}>
@@ -66,7 +66,7 @@ export default async function Page() {
       </div>
 
       <div style={{ background: "white", borderRadius: 12, padding: 16, border: "1px solid #e2e8f0" }}>
-        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>График по дням (линии)</h2>
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>Выручка и заказы по дням (линии)</h2>
         <OrdersDualLineSvg points={data.points} />
       </div>
 
