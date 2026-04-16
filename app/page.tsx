@@ -1,3 +1,4 @@
+import { OrdersDualLineSvg } from "@/components/OrdersDualLineSvg";
 import { fetchOrdersSeries } from "@/lib/orders-series";
 
 export const dynamic = "force-dynamic";
@@ -43,10 +44,10 @@ export default async function Page() {
   }
 
   return (
-    <section style={{ display: "grid", gap: 16 }}>
+    <section style={{ display: "grid", gap: 20 }}>
       <h1 style={{ margin: 0 }}>Заказы по дням (Supabase)</h1>
       <p style={{ margin: 0, color: "#475569" }}>
-        Данные читаются сервером из таблицы <code>public.orders</code>.
+        Данные из таблицы <code>public.orders</code>. Ниже — <strong>линейный график</strong> по дням и столбчатое представление.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(160px, 1fr))", gap: 12 }}>
@@ -60,7 +61,13 @@ export default async function Page() {
         </div>
       </div>
 
+      <div style={{ background: "white", borderRadius: 12, padding: 16, border: "1px solid #e2e8f0" }}>
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>График по дням</h2>
+        <OrdersDualLineSvg points={data.points} />
+      </div>
+
       <div style={{ background: "white", borderRadius: 12, padding: 14, border: "1px solid #e2e8f0" }}>
+        <h2 style={{ margin: "0 0 12px", fontSize: 18 }}>По дням (столбцы)</h2>
         <DayBars points={data.points} />
       </div>
     </section>
