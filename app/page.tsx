@@ -1,0 +1,58 @@
+async function getSeries() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const res = await fetch(`${baseUrl}/api/orders/series`, { cache: "no-store" });
+  if (!res.ok) {
+    throw new Error(`Failed to load series: HTTP ${res.status}`);
+  }
+  return (await res.json()) as { points: { day: string; orders: number; revenueKzt: number }[]; totalOrders: number; totalRevenueKzt: number };
+}
+
+function DayBars({ points }: { points: { day: string; orders: number; revenueKzt: number }[] }) {
+  const maxOrders = Math.max(1, ...points.map((p) => p.orders));
+  return (
+    <div style={{ display: "grid", gap: 10 }}>
+      {points.map((p) => {
+        const width = Math.max(2, Math.round((p.orders / maxOrders) * 100));
+        return (
+          <div key={p.day} style={{ display: "grid", gridTemplateColumns: "120px 1fr 160px", gap: 12, alignItems: "center" }}>
+            <div style={{ fontVariantNumeric: "tabular-nums", color: "#334155" }}>{p.day}</div>
+            <div style={{ background: "#e2e8f0", borderRadius: 8, overflow: "hidden", height: 18 }}>
+              <div style={{ width: `${width}%`, background: "#2563eb", height: "100%" }} />
+            </div>
+            <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", color: "#0f172a" }}>
+              {p.orders} шт · {Math.round(p.revenueKzt).toLocaleString("ru-RU")} ₸
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default async function Page() {
+  const data = await getSeries();
+
+  return (
+    <section style={{ display: "grid", gap: 16 }}>
+      <h1 style={{ margin: 0 }}>Заказы по дням (Supabase)</h1>
+      <p style={{ margin: 0, color: "#475569" }}>
+        Данные читаются сервером из таблицы <code>public.orders</code>.
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(160px, 1fr))", gap: 12 }}>
+        <div style={{ background: "white", borderRadius: 12, padding: 14, border: "1px solid #e2e8f0" }}>
+          <div style={{ color: "#64748b", fontSize: 13 }}>Всего заказов</div>
+          <div style={{ fontSize: 28, fontWeight: 700 }}>{data.totalOrders}</div>
+        </div>
+        <div style={{ background: "white", borderRadius: 12, padding: 14, border: "1px solid #e2e8f0" }}>
+          <div style={{ color: "#64748b", fontSize: 13 }}>Выручка, тенге</div>
+          <div style={{ fontSize: 28, fontWeight: 700 }}>{Math.round(data.totalRevenueKzt).toLocaleString("ru-RU")}</div>
+        </div>
+      </div>
+
+      <div style={{ background: "white", borderRadius: 12, padding: 14, border: "1px solid #e2e8f0" }}>
+        <DayBars points={data.points} />
+      </div>
+    </section>
+  );
+}
