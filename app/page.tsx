@@ -1,11 +1,6 @@
-async function getSeries() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/orders/series`, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error(`Failed to load series: HTTP ${res.status}`);
-  }
-  return (await res.json()) as { points: { day: string; orders: number; revenueKzt: number }[]; totalOrders: number; totalRevenueKzt: number };
-}
+import { fetchOrdersSeries } from "@/lib/orders-series";
+
+export const dynamic = "force-dynamic";
 
 function DayBars({ points }: { points: { day: string; orders: number; revenueKzt: number }[] }) {
   const maxOrders = Math.max(1, ...points.map((p) => p.orders));
@@ -30,7 +25,22 @@ function DayBars({ points }: { points: { day: string; orders: number; revenueKzt
 }
 
 export default async function Page() {
-  const data = await getSeries();
+  let data;
+  try {
+    data = await fetchOrdersSeries();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Unknown error";
+    return (
+      <section style={{ display: "grid", gap: 12 }}>
+        <h1 style={{ margin: 0 }}>Не удалось загрузить данные</h1>
+        <p style={{ margin: 0, color: "#b91c1c" }}>{msg}</p>
+        <p style={{ margin: 0, color: "#475569" }}>
+          Проверьте переменные окружения на Vercel: <code>NEXT_PUBLIC_SUPABASE_URL</code> и <code>SUPABASE_SERVICE_ROLE_KEY</code> (см.{" "}
+          <code>.env.example</code>).
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section style={{ display: "grid", gap: 16 }}>
