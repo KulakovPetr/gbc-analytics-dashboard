@@ -16,6 +16,7 @@ const PAGE_LIMIT = Number(process.env.RETAILCRM_SYNC_PAGE_LIMIT || 100);
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || "";
 const TELEGRAM_THRESHOLD_KZT = Number(process.env.TELEGRAM_ALERT_THRESHOLD_KZT || 50000);
+const TELEGRAM_MODE = (process.env.TELEGRAM_MODE || "live").toLowerCase();
 
 function required(name, value) {
   if (!value) {
@@ -164,6 +165,10 @@ function formatTelegramMessage(row) {
 }
 
 async function sendTelegram(text) {
+  if (TELEGRAM_MODE === "dry-run") {
+    console.log(`Telegram dry-run: ${text.split("\n")[1] || "message prepared"}`);
+    return;
+  }
   const url = `https://api.telegram.org/bot${encodeURIComponent(TELEGRAM_BOT_TOKEN)}/sendMessage`;
   const res = await fetch(url, {
     method: "POST",
@@ -201,6 +206,9 @@ async function markTelegramNotified(externalIds) {
 }
 
 async function notifyHighValueOrders(rows) {
+  if (!["live", "dry-run"].includes(TELEGRAM_MODE)) {
+    console.warn(`Unknown TELEGRAM_MODE=${TELEGRAM_MODE}. Expected "live" or "dry-run". Using "live".`);
+  }
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.log("Telegram token/chat_id not configured. Skipping notifications.");
     return;
@@ -218,6 +226,7 @@ async function notifyHighValueOrders(rows) {
     console.log(`Telegram: no new orders above ${TELEGRAM_THRESHOLD_KZT} KZT.`);
     return;
   }
+  console.log(`Telegram mode: ${TELEGRAM_MODE}. Candidates above threshold: ${candidates.length}`);
 
   const sentExternalIds = [];
   for (const row of candidates) {
