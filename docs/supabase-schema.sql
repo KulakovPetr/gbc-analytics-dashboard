@@ -23,3 +23,13 @@ create table if not exists public.orders (
 create index if not exists orders_created_at_idx on public.orders (created_at);
 create index if not exists orders_status_idx on public.orders (status);
 create index if not exists orders_synced_at_idx on public.orders (synced_at);
+
+create table if not exists public.order_events (
+  id bigint generated always as identity primary key,
+  external_id text not null,
+  event_type text not null,
+  sent_at timestamptz not null default now(),
+  unique(external_id, event_type)
+);
+
+create index if not exists order_events_event_type_idx on public.order_events (event_type);
