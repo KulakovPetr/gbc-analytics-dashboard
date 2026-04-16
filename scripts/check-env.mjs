@@ -55,16 +55,18 @@ async function checkSupabaseAnon() {
     return;
   }
   try {
-    const res = await fetch(`${url}/rest/v1/`, {
+    // NOTE:
+    // /rest/v1/ root introspection currently requires a secret key on many projects,
+    // so for publishable/anon validation we probe Auth settings endpoint instead.
+    const res = await fetch(`${url}/auth/v1/settings`, {
       headers: {
         apikey: anon,
-        Authorization: `Bearer ${anon}`,
       },
     });
-    const ok = res.ok || res.status === 404 || res.status === 406;
-    status("Supabase (anon)", ok, `${hostFromUrl(url)} HTTP ${res.status}`);
+    const ok = res.ok;
+    status("Supabase (anon/publishable)", ok, `${hostFromUrl(url)} HTTP ${res.status}`);
   } catch (e) {
-    status("Supabase (anon)", false, e.message);
+    status("Supabase (anon/publishable)", false, e.message);
   }
 }
 
